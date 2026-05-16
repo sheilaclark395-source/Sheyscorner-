@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shey's Corner</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(160deg, #1a0a2e 0%, #0d1a2e 50%, #1a0a1a 100%);
+      font-family: Georgia, 'Times New Roman', serif;
+      color: #fff;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .bg-glow {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background:
+        radial-gradient(ellipse at 20% 20%, rgba(255,105,180,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 80%, rgba(192,132,252,0.08) 0%, transparent 60%);
+    }
+
+    .star {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      animation: twinkle 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes twinkle { from { opacity: 0.15; } to { opacity: 0.6; } }
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    @keyframes shimmer {
+      0% { background-position: -200% center; }
+      100% { background-position: 200% center; }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-20px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    .wrap {
+      position: relative; z-index: 1;
+      max-width: 500px; margin: 0 auto;
+      padding: 48px 20px 60px;
+    }
+
+    /* Header */
+    .header {
+      text-align: center; margin-bottom: 36px;
+      animation: fadeUp 0.9s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+
+    .avatar-ring {
+      width: 100px; height: 100px; border-radius: 50%;
+      margin: 0 auto 20px;
+      background: linear-gradient(135deg, #FF69B4, #C084FC, #FF69B4);
+      padding: 3px;
+      box-shadow: 0 0 50px rgba(255,105,180,0.4);
+      animation: float 4s ease-in-out infinite;
+    }
+
+    .avatar-inner {
+      width: 100%; height: 100%; border-radius: 50%;
+      background: #1a0a2e;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 42px;
+    }
+
+    h1 {
+      font-size: 2.4rem; font-weight: 700; margin-bottom: 6px;
+      background: linear-gradient(135deg, #FF69B4 0%, #FFB6C1 40%, #C084FC 80%, #FF69B4 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 4s linear infinite;
+    }
+
+    .tagline {
+      font-size: 0.85rem; color: rgba(255,255,255,0.5);
+      letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 12px;
+    }
+
+    .quote {
+      font-size: 0.95rem; color: rgba(255,182,193,0.75);
+      max-width: 320px; margin: 0 auto 20px;
+      line-height: 1.7; font-style: italic;
+    }
+
+    .divider {
+      width: 80px; height: 2px; margin: 0 auto;
+      background: linear-gradient(90deg, transparent, #FF69B4, #C084FC, transparent);
+      border-radius: 2px;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex; gap: 8px; margin-bottom: 24px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 12px; padding: 4px;
+      animation: fadeUp 0.7s ease 0.2s both;
+    }
+
+    .tab-btn {
+      flex: 1; padding: 10px; border-radius: 9px;
+      border: none; cursor: pointer;
+      background: transparent;
+      color: rgba(255,255,255,0.4);
+      font-size: 0.9rem; font-family: Georgia, serif;
+      letter-spacing: 0.04em;
+      transition: all 0.3s ease;
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, rgba(255,105,180,0.3), rgba(192,132,252,0.3));
+      color: #fff; font-weight: 600;
+      border: 1px solid rgba(255,105,180,0.3);
+    }
+
+    /* Links */
+    .links-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .link-card {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 18px; border-radius: 14px;
+      text-decoration: none; color: #fff;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      transition: all 0.35s cubic-bezier(0.16,1,0.3,1);
+      animation: slideIn 0.5s ease both;
+    }
+
+    .link-card:hover {
+      background: linear-gradient(135deg, rgba(255,105,180,0.15), rgba(192,132,252,0.1));
+      border-color: rgba(255,105,180,0.4);
+      transform: translateX(8px);
+      box-shadow: 0 4px 20px rgba(255,105,180,0.15);
+    }
+
+    .link-icon {
+      width: 42px; height: 42px; border-radius: 10px; flex-shrink: 0;
+      background: rgba(255,105,180,0.12);
+      border: 1px solid rgba(255,105,180,0.25);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      transition: transform 0.3s ease;
+    }
+
+    .link-card:hover .link-icon { transform: scale(1.15) rotate(-5deg); }
+
+    .link-text { flex: 1; }
+    .link-name { font-weight: 600; font-size: 0.95rem; transition: color 0.3s; }
+    .link-card:hover .link-name { color: #FFB6C1; }
+    .link-desc { font-size: 0.72rem; color: rgba(255,255,255,0.3); margin-top: 2px; }
+
+    .link-arrow {
+      color: #FF69B4; font-size: 16px;
+      opacity: 0.3; transition: all 0.3s ease;
+      transform: translateX(-4px);
+    }
+    .link-card:hover .link-arrow { opacity: 1; transform: translateX(0); }
+
+    /* Updates */
+    .updates-list { display: flex; flex-direction: column; gap: 14px; }
+
+    .update-card {
+      padding: 20px; border-radius: 16px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,105,180,0.15);
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .update-emoji { font-size: 28px; margin-bottom: 10px; }
+    .update-text {
+      font-size: 0.95rem; line-height: 1.6;
+      color: rgba(255,255,255,0.85); font-style: italic;
+      margin-bottom: 10px;
+    }
+    .update-time { font-size: 0.72rem; color: rgba(255,105,180,0.5); letter-spacing: 0.05em; }
+
+    /* Footer */
+    .footer {
+      text-align: center; margin-top: 44px;
+      font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase;
+      color: rgba(255,105,180,0.35);
+      animation: fadeUp 1s ease 0.8s both;
+    }
+
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div class="bg-glow"></div>
+
+  <!-- Stars -->
+  <script>
+    const colors = ["#FF69B4","#C084FC"];
+    for (let i = 0; i < 22; i++) {
+      const s = document.createElement("div");
+      s.className = "star";
+      s.style.cssText = `
+        left:${(i*37+10)%100}%; top:${(i*53+5)%100}%;
+        width:${i%3===0?3:2}px; height:${i%3===0?3:2}px;
+        background:${colors[i%2]};
+        animation-delay:${(i%4)*0.5}s;
+        animation-duration:${2+(i%3)}s;
+      `;
+      document.body.appendChild(s);
+    }
+  </script>
+
+  <div class="wrap">
+    <!-- Header -->
+    <div class="header">
+      <div class="avatar-ring">
+        <div class="avatar-inner">🌸</div>
+      </div>
+      <h1>Shey's Corner</h1>
+      <p class="tagline">Businesswoman · Artist · Visionary</p>
+      <p class="quote">"I build empires and I sing while doing it. Business is my stage — music is my soul."</p>
+      <div class="divider"></div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" onclick="showTab('links', this)">🔗 My Links</button>
+      <button class="tab-btn" onclick="showTab('updates', this)">✨ Updates</button>
+    </div>
+
+    <!-- Happy Life Studio Featured Card -->
+    <a href="https://happylifestudio.netlify.app" target="_blank" id="hls-card" style="
+      display:block; text-decoration:none; color:#fff;
+      background: linear-gradient(135deg, rgba(0,212,124,0.15), rgba(0,180,100,0.08));
+      border: 1px solid rgba(0,212,124,0.4);
+      border-radius: 18px; padding: 22px 20px; margin-bottom: 20px;
+      transition: all 0.35s ease;
+      box-shadow: 0 4px 30px rgba(0,212,124,0.12);
+      animation: fadeUp 0.7s ease 0.1s both;
+    " onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 40px rgba(0,212,124,0.25)'"
+       onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 30px rgba(0,212,124,0.12)'">
+      <div style="display:flex; align-items:center; gap:14px; margin-bottom:12px;">
+        <div style="font-size:32px;">🎨</div>
+        <div>
+          <div style="font-size:1.1rem; font-weight:700; color:#00D47C; letter-spacing:0.05em;">HAPPY LIFE STUDIO</div>
+          <div style="font-size:0.75rem; color:rgba(255,255,255,0.4); letter-spacing:0.08em; text-transform:uppercase;">Wall Plaques · Home Décor</div>
+        </div>
+        <span style="margin-left:auto; color:#00D47C; font-size:18px;">→</span>
+      </div>
+      <p style="font-size:0.85rem; color:rgba(255,255,255,0.6); line-height:1.6; margin-bottom:14px; font-style:italic;">
+        Beautiful inspiring wall plaques that bring joy, love & positivity to every home.
+      </p>
+      <div style="background:rgba(0,212,124,0.1); border:1px solid rgba(0,212,124,0.25); border-radius:8px; padding:10px 14px; font-size:0.82rem; color:#00D47C;">
+        💚 Order via CashApp: <strong>$Mommyflower123</strong>
+      </div>
+    </a>
+
+    <!-- Links Panel -->
+    <div id="panel-links" class="links-list">
+      <a class="link-card" href="https://beheardmusic.com" target="_blank" style="animation-delay:0.05s">
+        <div class="link-icon">🎵</div>
+        <div class="link-text"><div class="link-name">Be Heard Music</div><div class="link-desc">Main Music Hub</div></div>
+        <span class="link-arrow">→</span>
+      </a>
+      <a class="link-card" href="https://icansing.netlify.app" target="_blank" style="animation-delay:0.1s">
+        <div class="link-icon">🎤</div>
+        <div class="link-text"><div class="link-name">I Can Sing</div><div class="link-desc">Vocal Platform</div></div>
+        <span class="link-arrow">→</span>
+      </a>
+      <a class="link-card" href="https://voicesrreal.netlify.app" target="_blank" style="animation-delay:0.15s">
+        <div class="link-icon">🔊</div>
+        <div class="link-text"><div class="link-name">Voices R Real</div><div class="link-desc">Voice Hub</div></div>
+        <span class="link-arrow">→</span>
+      </a>
+      <a class="link-card" href="https://spotify.com" target="_blank" style="animation-delay:0.2s">
+        <div class="link-icon">🎧</div>
+        <div class="link-text"><div class="link-name">Spotify</div><div class="link-desc">Stream My Music</div></div>
+        <span class="link-arrow">→</span>
+      </a>
+      <a class="link-card" href="https://music.apple.com" target="_blank" style="animation-delay:0.25s">
+        <div class="link-icon">🍎</div>
+        <div class="link-text"><div class="link-name">Apple Music</div><div class="link-desc">Listen on Apple</div></div>
+        <span class="link-arrow">→</span>
+      </a>
+      <a class="link-card" href="https://youtube.com" target="_blank" style="animation-delay:0.3s">
+        <div class="link-icon">▶️</div>
+        <div class="link-text"><div class="link-name">YouTube</div><div class="link-desc">Watch & Subscribe</div></div>
+        <span class="link-arrow">→</span>
+      </a>
+      <a class="link-card" href="https://soundcloud.com" target="_blank" style="animation-delay:0.35s">
+        <div class="link-icon">☁️</div>
+        <div class="link-text"><div class="link-name">SoundCloud</div><div class="link-desc">Stream & Share</div></div>
+        <span class="link-arrow">→</span>
+      </a>
+      <a class="link-card" href="https://instagram.com" target="_blank" style="animation-delay:0.4s">
+        <div class="link-icon">📸</div>
+        <div class="link-text"><div class="link-name">Instagram</div><div class="link-desc">Follow Me</div></div>
+        <span class="link-arrow">→</span>
+      </a>
+      <a class="link-card" href="https://tiktok.com" target="_blank" style="animation-delay:0.45s">
+        <div class="link-icon">🎬</div>
+        <div class="link-text"><div class="link-name">TikTok</div><div class="link-desc">Short Clips</div></div>
+        <span class="link-arrow">→</span>
+      </a>
+      <a class="link-card" href="https://facebook.com" target="_blank" style="animation-delay:0.5s">
+        <div class="link-icon">📘</div>
+        <div class="link-text"><div class="link-name">Facebook</div><div class="link-desc">Join the Community</div></div>
+        <span class="link-arrow">→</span>
+      </a>
+      <a class="link-card" href="https://x.com" target="_blank" style="animation-delay:0.55s">
+        <div class="link-icon">✖️</div>
+        <div class="link-text"><div class="link-name">X / Twitter</div><div class="link-desc">Latest Updates</div></div>
+        <span class="link-arrow">→</span>
+      </a>
+    </div>
+
+    <!-- Updates Panel -->
+    <div id="panel-updates" class="updates-list hidden">
+      <div class="update-card" style="animation-delay:0s">
+        <div class="update-emoji">🎶</div>
+        <p class="update-text">"New music dropping soon — stay tuned!"</p>
+        <span class="update-time">Just now</span>
+      </div>
+      <div class="update-card" style="animation-delay:0.1s">
+        <div class="update-emoji">👑</div>
+        <p class="update-text">"Running businesses and breaking barriers — this is what I was built for."</p>
+        <span class="update-time">Yesterday</span>
+      </div>
+      <div class="update-card" style="animation-delay:0.2s">
+        <div class="update-emoji">💜</div>
+        <p class="update-text">"Thank you for all the love and support. You keep me going!"</p>
+        <span class="update-time">2 days ago</span>
+      </div>
+    </div>
+
+    <div class="footer">Made with 💜 · Shey's Corner</div>
+  </div>
+
+  <script>
+    function showTab(tab, btn) {
+      document.getElementById("panel-links").classList.add("hidden");
+      document.getElementById("panel-updates").classList.add("hidden");
+      document.getElementById("panel-" + tab).classList.remove("hidden");
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+    }
+  </script>
+</body>
+</html>
